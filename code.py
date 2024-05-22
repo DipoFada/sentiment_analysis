@@ -312,3 +312,70 @@ plt.ylabel('Loss')
 plt.xlabel('epoch')
 plt.legend(['train', 'test'], loc = 'upper left')
 plt.show()
+
+#Convolutional Neural Network
+cnn_model = Sequential()
+embedding_layer = Embedding(vocab_length, 100, weights = [embedding_matrix], input_length = maxlen, trainable = False)
+cnn_model.add(embedding_layer)
+cnn_model.add(Conv1D(128, 5, activation = 'relu'))
+cnn_model.add(GlobalMaxPooling1D())
+cnn_model.add(Dense(1, activation = 'sigmoid'))
+
+cnn_model.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['acc'])
+print (cnn_model.summary())
+
+cnn_model_history = cnn_model.fit(a_train, b_train, batch_size = 128, epochs = 6, verbose = 1, validation_split = 0.2)
+#predictions on the test set
+score = cnn_model.evaluate(a_test, b_test, verbose = 1)
+print ('CNN Test Score: ', score[0])
+print ('CNN Test Accuracy: ', score[1])
+
+#plotting chart performance
+plt.plot(cnn_model_history.history['acc'])
+plt.plot(cnn_model_history.history['val_acc'])
+plt.title('Model Accuracy')
+plt.ylabel('Accuracy')
+plt.xlabel('Epoch')
+plt.legend(['train', 'test'], loc = 'upper left')
+plt.show()
+
+plt.plot(cnn_model_history.history ['loss'])
+plt.plot(cnn_model_history.history ['val_loss'])
+plt.title('Model Logs')
+plt.ylabel ('Loss')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc = 'upper left')
+plt.show()
+
+#Recurrent Neural Network
+lstm_model = Sequential()
+embedding_layer = Embedding(vocab_length, 100, weights = [embedding_matrix], input_length = maxlen, trainable = False)
+lstm_model.add(embedding_layer)
+lstm_model.add(LSTM(128))
+lstm_model.add(Dense(1, activation = 'sigmoid'))
+#compiling the model
+lstm_model.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['acc'])
+print (lstm_model.summary())
+#Model Training
+lstm_model_history = lstm_model.fit(a_train, b_train, batch_size = 128, epochs = 6, verbose = 1, validation_split = 0.2)
+#predictions on the test set
+score = lstm_model.evaluate(a_test, b_test, verbose = 1)
+print ('LSTM Test Score: ', score[0])
+print ('LSTM Test Accuracy: ', score[1])
+
+#Plotting chart of performance
+plt.plot(lstm_model_history.history['acc'])
+plt.plot(lstm_model_history.history['val_acc'])
+plt.title('Model Accuracy')
+plt.ylabel('Accuracy')
+plt.xlabel('Epoch')
+plt.legend (['train', 'test'], loc = 'upper left')
+plt.show()
+
+plt.plot(lstm_model_history.history ['loss'])
+plt.plot(lstm_model_history.history ['val_loss'])
+plt.title('Model Logs')
+plt.ylabel('Loss')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc = 'upper left')
+plt.show()
